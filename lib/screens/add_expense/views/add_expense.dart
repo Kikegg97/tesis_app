@@ -123,9 +123,9 @@ class _AddExpenseState extends State<AddExpense> {
                         itemBuilder: (context, int i) {
                           return Card(
                             child: ListTile(
-                              leading: Image.asset('assets/food.png', scale: 2),
-                              title: Text('Comida'),
-                              tileColor: Colors.red,
+                              leading: Image.asset('state.categories[i].icon', scale: 2),
+                              title: Text(state.categories[i].name),
+                              //tileColor: state.categories[i].color,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
