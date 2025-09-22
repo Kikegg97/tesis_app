@@ -169,14 +169,13 @@ Future getCategoryCreation(BuildContext context) {
                         : TextButton(
                             onPressed: () {
                               // Create Category Object and POP
-                              setState(() {
+                                Category category = Category.empty;
                                 category.categoryId = const Uuid().v1();
                                 category.name = categoryNameController.text;
                                 category.icon = iconSelected;
                                 category.color = categoryColor.value;
-                              });
-                              
-                              context.read<CreateCategoryBloc>().add(CreateCategory(category));
+                                context.read<CreateCategoryBloc>().add(CreateCategory(category));
+                                Navigator.pop(context);
                             },
                             style: TextButton.styleFrom(backgroundColor: Colors.black, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
                             child: const Text(
