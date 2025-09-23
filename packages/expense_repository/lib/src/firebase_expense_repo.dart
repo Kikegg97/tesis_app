@@ -2,9 +2,10 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expense_repository/expense_repository.dart';
 
-class FirebaseExpenseRepository implements ExpenseRepository {  
+class FirebaseExpenseRepo implements ExpenseRepository {
   final categoryCollection = FirebaseFirestore.instance.collection('categories');
 	final expenseCollection = FirebaseFirestore.instance.collection('expenses');
+
 
   @override
   Future<void> createCategory(Category category) async {
@@ -19,7 +20,7 @@ class FirebaseExpenseRepository implements ExpenseRepository {
   }
 
   @override
-  Future<List<Category>> getCategories() async {
+  Future<List<Category>> getCategory() async {
     try {
       return await categoryCollection
         .get()
@@ -31,4 +32,40 @@ class FirebaseExpenseRepository implements ExpenseRepository {
       rethrow;
     }
   }
+
+  @override
+  Future<void> createExpense(Expense expense) async {
+    try {
+      await expenseCollection
+        .doc(expense.expenseId)
+        .set(expense.toEntity().toDocument());
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<Expense>> getExpenses() async {
+    try {
+      return await expenseCollection
+        .get()
+        .then((value) => value.docs.map((e) => 
+          Expense.fromEntity(ExpenseEntity.fromDocument(e.data()))
+        ).toList());
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
+  }
+
 }
+
+/*
+onPressed: () async {
+                          final getCatsBloc = context.read<GetCategoriesBloc>(); // antes del await
+                          final newCategory = await getCategoryCreation(context);
+                          if (newCategory == null) return;
+                          getCatsBloc.add(GetCategories());
+                        },
+ */
